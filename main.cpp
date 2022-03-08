@@ -128,7 +128,7 @@ int main(int argc,char** argv) {
 				return -1;
 			}
 			int msg_bytes = ret;
-			ret = saveFile(argv[3], buf, buf.size);
+			ret = saveFile(argv[3], buf, msg_bytes);
 			if (ret < 0) {
 				cout << "save file failed: " << ret << endl;
 				return -1;

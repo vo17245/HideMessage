@@ -41,7 +41,7 @@ int BMP24::insertMsg(const char* data, unsigned short bytes)
 	if (ret < 0) {
 		return ret;
 	}
-	ret=insert(data, bytes, 16);
+	ret=insert(data, bytes, 2);
 	if (ret < 0) {
 		return ret;
 	}
@@ -56,12 +56,11 @@ int BMP24::extractMsg(char* buf, unsigned bufSize)
 	if (ret < 0) {
 		return ret;
 	}
-	int msg_bytes=ret;
-	ret = extract(buf, bufSize, 16, bytes);
+	ret = extract(buf, bufSize, 2, bytes);
 	if (ret < 0) {
 		return ret;
 	}
-	return msg_bytes;
+	return bytes;
 }
 
 int BMP24::msgBytes()
@@ -76,7 +75,7 @@ int BMP24::insert(const char* data,unsigned bytes,int begin)
 	if ((matBytes-begin) < bytes*8) {
 		return -1;
 	}
-	int matPos = begin;
+	int matPos = begin*8;
 	int dataPos = 0;
 	char curChar;
 	while (dataPos < bytes) {
@@ -97,7 +96,8 @@ int BMP24::insert(const char* data,unsigned bytes,int begin)
 
 int BMP24::extract(char* buf, unsigned bufSize,int begin,int bytes)
 {
-	if (matBytes < bytes * 8) {
+	int matPos = begin * 8;
+	if (matBytes -matPos< bytes * 8) {
 		return -1;
 	}
 	if (bufSize < bytes) {
@@ -105,7 +105,6 @@ int BMP24::extract(char* buf, unsigned bufSize,int begin,int bytes)
 	}
 	char curChar;
 	int bufPos=0;
-	int matPos = begin;
 	for (int i = 0;i < bytes;++i) {
 		for (int j = 0;j < 8;++j) {
 			if ((mat[matPos] | 0x1) == mat[matPos]) {
