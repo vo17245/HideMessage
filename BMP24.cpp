@@ -56,8 +56,12 @@ int BMP24::extractMsg(char* buf, unsigned bufSize)
 	if (ret < 0) {
 		return ret;
 	}
+	int msg_bytes=ret;
 	ret = extract(buf, bufSize, 16, bytes);
-	return 0;
+	if (ret < 0) {
+		return ret;
+	}
+	return msg_bytes;
 }
 
 int BMP24::msgBytes()
